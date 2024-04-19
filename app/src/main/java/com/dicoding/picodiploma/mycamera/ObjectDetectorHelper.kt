@@ -84,6 +84,18 @@ class ObjectDetectorHelper (
         val imageProcessor = ImageProcessor.Builder()
             .add(Rot90Op(-image.imageInfo.rotationDegrees/90))
             .build()
+
+        val tensorImage = imageProcessor.process(TensorImage.fromBitmap(toBitmap(image)))
+
+        var inferenceTime = SystemClock.uptimeMillis()
+        val results = objectDetector?.detect(tensorImage)
+        inferenceTime = SystemClock.uptimeMillis() - inferenceTime
+        detectorListener?.onResults(
+            results,
+            inferenceTime,
+            tensorImage.height,
+            tensorImage.width
+        )
     }
 
     private fun toBitmap(image: ImageProxy): Bitmap {
@@ -105,7 +117,9 @@ class ObjectDetectorHelper (
         fun onError(error: String)
         fun onResults(
             results: MutableList<Detection>?,
-            inferenceTime: Long
+            inferenceTime: Long,
+            imageHeight: Int,
+            imageWidth: Int,
         )
     }
 }
