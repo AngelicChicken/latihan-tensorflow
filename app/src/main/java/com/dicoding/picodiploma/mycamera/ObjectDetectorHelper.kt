@@ -47,14 +47,14 @@ class ObjectDetectorHelper (
             .setScoreThreshold(threshold)
             .setMaxResults(maxResults)
         val baseOptionsBuilder = BaseOptions.builder()
-            if (CompatibilityList().isDelegateSupportedOnThisDevice){
+        if (CompatibilityList().isDelegateSupportedOnThisDevice){
                 baseOptionsBuilder.useGpu()
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1){
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1){
                 baseOptionsBuilder.useNnapi()
-            } else {
+        } else {
                 //pakai cpu
                 baseOptionsBuilder.setNumThreads(4)
-            }
+        }
         optionsBuilder.setBaseOptions(baseOptionsBuilder.build())
 
         try {
